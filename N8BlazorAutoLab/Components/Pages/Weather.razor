@@ -4,15 +4,14 @@
 
 <PageTitle>Weather</PageTitle>
 
-<h1>Weather \ StreamRendering</h1>
-
+<h1>Weather \ StreamRendering | SSG</h1>
 <p>This component demonstrates showing data.</p>
+
 <button @onclick=HandleQuery class="btn btn-primary">刷新</button>
 
-<div class="alert alert-warning" role="alert">
+<div class="alert alert-warning my-3" role="alert">
   @@onclick 訊息無效！
 </div>
-
 
 @if (f_loading)
 {
