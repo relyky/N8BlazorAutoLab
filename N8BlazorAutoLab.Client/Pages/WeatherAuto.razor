@@ -1,19 +1,18 @@
-﻿@page "/weather"
-@attribute [StreamRendering]
+﻿@page "/weather-auto"
+@rendermode InteractiveAuto
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Weather Auto</PageTitle>
 
-<h1>Weather \ StreamRendering</h1>
+<h1>Weather Auto</h1>
 
 <p>This component demonstrates showing data.</p>
 <button @onclick=HandleQuery class="btn btn-primary">刷新</button>
-<pre>@@onclick 訊息無效！</pre>
 
 @if (f_loading)
 {
   <p><em>Loading...</em></p>
 }
-else if (forecasts != null)
+else if(forecasts != null)
 {
   <table class="table">
     <thead>
