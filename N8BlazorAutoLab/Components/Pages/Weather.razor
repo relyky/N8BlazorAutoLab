@@ -8,7 +8,11 @@
 
 <p>This component demonstrates showing data.</p>
 <button @onclick=HandleQuery class="btn btn-primary">刷新</button>
-<pre>@@onclick 訊息無效！</pre>
+
+<div class="alert alert-warning" role="alert">
+  @@onclick 訊息無效！
+</div>
+
 
 @if (f_loading)
 {

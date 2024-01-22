@@ -1,5 +1,6 @@
 ﻿@page "/weather-auto"
 @rendermode InteractiveAuto
+@inject NavigationManager navSvc
 
 <PageTitle>Weather Auto</PageTitle>
 
@@ -7,6 +8,17 @@
 
 <p>This component demonstrates showing data.</p>
 <button @onclick=HandleQuery class="btn btn-primary">刷新</button>
+
+<div class="alert alert-warning" role="alert">
+  只能用 WebAPI 與伺服器端通訊。
+</div>
+
+@if(errorMessage != null)
+{
+  <div class="alert alert-danger" role="alert">
+    @errorMessage
+  </div>
+}
 
 @if (f_loading)
 {
@@ -40,6 +52,7 @@ else if(forecasts != null)
 @code {
   WeatherForecast[]? forecasts;
   bool f_loading = false;
+  string? errorMessage = null;
 
   protected override async Task OnInitializedAsync()
   {
@@ -48,21 +61,28 @@ else if(forecasts != null)
 
   async Task HandleQuery()
   {
-    f_loading = true;
+    try
+    {
+      errorMessage = null;
+      f_loading = true;
 
-    // Simulate asynchronous loading to demonstrate streaming rendering
-    await Task.Delay(500);
+      using HttpClient client = new HttpClient();
+      client.BaseAddress = new Uri(navSvc.BaseUri);
 
-    var startDate = DateOnly.FromDateTime(DateTime.Now);
-    var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-    forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-      {
-        Date = startDate.AddDays(index),
-        TemperatureC = Random.Shared.Next(-20, 55),
-        Summary = summaries[Random.Shared.Next(summaries.Length)]
-      }).ToArray();
+      using HttpResponseMessage resp = await client.GetAsync("api/WeatherData");
+      if (!resp.IsSuccessStatusCode)
+        return;
 
-    f_loading = false;
+      forecasts = await resp.Content.ReadFromJsonAsync<WeatherForecast[]>();
+    }
+    catch(Exception ex)
+    {
+      errorMessage = "出現例外! " + ex.Message;
+    }
+    finally
+    {
+      f_loading = false;
+    }
   }
 
 }
