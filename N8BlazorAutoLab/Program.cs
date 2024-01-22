@@ -1,5 +1,6 @@
 using N8BlazorAutoLab.Client.Pages;
 using N8BlazorAutoLab.Components;
+using N8BlazorAutoLab.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddScoped<WeatherDataService>();
 
 var app = builder.Build();
 
